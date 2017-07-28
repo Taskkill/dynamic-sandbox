@@ -1,0 +1,26 @@
+{
+  "name": "dynamic-sandbox",
+  "version": "0.0.1",
+  "description": "Dynamic sandboxed and mockable environment in JavaScript for code snippets.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Taskkill/dynamic-sandbox.git"
+  },
+  "keywords": [
+    "snippet",
+    "runtime",
+    "sandbox",
+    "mockable",
+    "eval"
+  ],
+  "author": "Taskkill",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Taskkill/dynamic-sandbox/issues"
+  },
+  "homepage": "https://github.com/Taskkill/dynamic-sandbox#readme"
+}
