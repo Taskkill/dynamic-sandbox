@@ -1,6 +1,6 @@
 module.exports = {
-  evaluate(source, context = {}, allowed = {}, restricted = {}) {
-    runInSandbox(source, context, allowed, restricted)
+  evaluate(source, context = {}, restricted = {}) {
+    runInSandbox(source, context, restricted)
   },
   createTerminal() {
     let terminal = null
@@ -8,9 +8,9 @@ module.exports = {
       reset() {
         terminal = null
       },
-      sendBatch(batch, context = {}, allowed = {}, restricted = {}) {
+      sendBatch(batch, context = {}, restricted = {}) {
         if (terminal === null) {
-          terminal = runSandboxTerminal(batch, context, allowed, restricted)
+          terminal = runSandboxTerminal(batch, context, restricted)
           terminal.next(batch)
           return
         }
@@ -20,73 +20,56 @@ module.exports = {
   }
 }
 
-// let terminal = null
-//
-// module.exports = {
-//   evaluate(source, context, allowed, restricted = window || {}) {
-//     runInSandbox(source, context, allowed, restricted)
-//   },
-//   resetTerminal() {
-//     terminal = null
-//   },
-//   commit(source, context = {}, allowed = {}, restricted = window || {}) {
-//     if (terminal === null) {
-//       terminal = runSandboxTerminal(source, context, allowed, restricted)
-//       terminal.next(source)
-//       return
-//     }
-//     terminal.next(source)
-//   }
-// }
-
-function runInSandbox(source, context, allowed, restricted) {
-  const _console = context.console || console
-  const err = _console.error
-
-  // alowing eval for myself
-  allowed['eval'] = null
-
+function runInSandbox(source, context, restricted) {
   const scope = new Proxy(
     {
-      source: source
+      source,
+      eval
     },
     {
       has(target, propName) {
-        if (propName in context) return true
-
-        if (propName in allowed) return false
-
-        if (propName in restricted) {
-          err(
-            "Error - DO NOT USE: '" + propName + "' IT IS RESTRICTED VARIABLE"
-          )
-          throw 'ERROR USE OF PROTECTED VARIABLES'
+        if (propName in target) {
+          return true
         }
 
-        if (propName in target) return true
+        if (propName in context) {
+          return true
+        }
+
+        if (propName in restricted) {
+          throw `ReferenceError: ${propName} is restricted`
+        }
 
         // check if var or function variable infected current function's scope
         let searchedVar
         try {
           eval(`searchedVar = ${propName}`)
+
+          if (typeof searchedVar === 'function') {
+            return false
+          }
+
+          return true
         } catch (Ex) {
           // searched for var not in global scope, not supplied from upper scope
           // this var doesn't exist - throw Exception and log error
-          err('ERROR - VARIABLE ' + propName + ' was not declared!')
-          throw 'Undeclared variable use Exception'
+          throw `ReferenceError: ${propName} is not defined`
         }
 
-        if (typeof searchedVar === 'function') return false
-
-        return true
+        return false
       },
       set(target, propName, value) {
-        if (context[propName]) context[propName] = value
-        else target[propName] = value
+        if (context[propName]) {
+          context[propName] = value
+        } else {
+          target[propName] = value
+        }
         return true
       },
       get(target, propName) {
-        if (context[propName]) return context[propName]
+        if (context[propName]) {
+          return context[propName]
+        }
         return target[propName]
       }
     }
@@ -97,43 +80,43 @@ function runInSandbox(source, context, allowed, restricted) {
   }
 }
 
-function* runSandboxTerminal(source, context = {}, allowed = {}, restricted) {
-  const _console = context.console || console
-  const err = _console.error
-
-  // alowing eval for myself
-  allowed['eval'] = null
+function* runSandboxTerminal(source, context, restricted) {
   const target = {
-    source: source
+    source,
+    eval
   }
 
   const scope = new Proxy(target, {
     has(target, propName) {
-      if (propName in context) return true
-
-      if (propName in allowed) return false
-
-      if (propName in restricted) {
-        err("Error - DO NOT USE: '" + propName + "' IT IS RESTRICTED VARIABLE")
-        throw 'ERROR USE OF PROTECTED VARIABLES'
+      if (propName in target) {
+        return true
       }
 
-      if (propName in target) return true
+      if (propName in context) {
+        return true
+      }
+
+      if (propName in restricted) {
+        throw `ReferenceError: ${propName} is restricted`
+      }
 
       // check if var or function variable infected current function's scope
       let searchedVar
       try {
         eval(`searchedVar = ${propName}`)
+
+        if (typeof searchedVar === 'function') {
+          return false
+        }
+
+        return true
       } catch (Ex) {
-        // searched for var not in restricted scope, not supplied from upper scope
+        // searched for var not in global scope, not supplied from upper scope
         // this var doesn't exist - throw Exception and log error
-        err('ERROR - VARIABLE ' + propName + ' was not declared!')
-        throw 'Undeclared variable use Exception'
+        throw `ReferenceError: ${propName} is not defined`
       }
 
-      if (typeof searchedVar === 'function') return false
-
-      return true
+      return false
     },
     set(target, propName, value) {
       if (context[propName]) context[propName] = value

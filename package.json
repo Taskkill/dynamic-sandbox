@@ -1,10 +1,10 @@
 {
   "name": "dynamic-sandbox",
-  "version": "0.0.1",
-  "description": "Dynamic sandboxed and mockable environment in JavaScript for code snippets.",
+  "version": "0.0.7",
+  "description": "Dynamic sandboxed and mockable environment for JavaScript code snippets.",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
