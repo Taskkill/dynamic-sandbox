@@ -1,43 +1,143 @@
 const { evaluate, createTerminal } = require('./main')
 
-const src = `
-console.log("Hello World!")
-let a = new Array(2)
-const e = 'text'
-console.log(e)
-console.error('my little error', ', and second one')
+// test transparency
+{
+  const src = `
+  console.log('#0 - It should log normally:', true)
+  `
 
-var el = 23
-console.log("el ", el)
-
-function test(a) {
-  return a + 4
+  evaluate(src)
 }
 
-var o = test(el)
-console.log("o", o)
-
-// console.log(evaluate)
-`
-const src2 = 'process'
-
-evaluate(
-  src,
-  {
-    // console,
-    Array: function() {
-      // override
-      console.error('Use [] not Array()')
-      return []
-    },
-    console: {
-      error() {
-        console.error.call(null, 'Mock console: ',...arguments)
-      },
-      log() {
-        console.log(...arguments)
-      }
+// test basic functionality
+{
+  const referenceOut = []
+  const referenceFn = () => {
+    referenceOut.push('Hello world!')
+    for (let i = 0; i < 10; i++) {
+      referenceOut.push(i)
     }
-  },
-  { Integer: null }
-)
+  }
+
+  const src = `
+  console.log('Hello world!')
+  for (let i = 0; i < 10; i++) {
+    console.log(i)
+  }
+  `
+  const output = []
+  const context = {
+    console: {
+      log: val => output.push(val)
+    }
+  }
+
+  evaluate(src, context)
+  referenceFn()
+
+  const success = JSON.stringify(output) === JSON.stringify(referenceOut)
+  if (success) {
+    console.log('#1 - It should be same:', success)
+  } else {
+    throw '#1 - It should be same'
+  }
+}
+
+// test restricted variabe
+{
+  let throws = false
+
+  const src = `
+  console.log('Hello world!')
+  `
+  const restricted = {
+    console
+  }
+
+  try {
+    evaluate(src, {}, restricted)
+  } catch (E) {
+    throws = E === `ReferenceError: console is restricted`
+  }
+
+  const success = throws
+  if (success) {
+    console.log('#2 - It should throw:', success)
+  } else {
+    throw '#2 - It should throw'
+  }
+}
+
+// test declaration of variables
+{
+  const output = []
+  const src = `
+  var a = 23
+  let b = 23
+  let c = 23
+
+  console.log(a)
+  console.log(a + b)
+  console.log(a + b + c)
+  `
+  const context = {
+    console: {
+      log: val => output.push(val)
+    }
+  }
+
+  evaluate(src, context)
+
+  const success = output[0] === 23 && output[1] === 46 && output[2] === 69
+  if (success) {
+    console.log('#3 - It should be same:', success)
+  } else {
+    throw '#2 - It should be same'
+  }
+}
+
+// test function declaration
+{
+  const output = []
+  const src = `
+  function test(val) {
+    console.log(val)
+  }
+
+  test(23)
+  `
+  const context = {
+    console: {
+      log: val => output.push(val)
+    }
+  }
+
+  evaluate(src, context)
+
+  const success = output[0] === 23 && output.length === 1
+  if (success) {
+    console.log('#4 - It should be same:', success)
+  } else {
+    throw '#4 - It should be same'
+  }
+}
+
+// test for use of undeclared variable
+{
+  let throws = false
+  const src = `
+  nonExistent
+  `
+
+  try {
+    evaluate(src)
+  } catch (E) {
+    throws = E.toString() === `ReferenceError: nonExistent is not defined`
+  }
+  const success = throws
+  if (success) {
+    console.log('#5 - It should throw:', success)
+  } else {
+    throw '#5 - It should throw'
+  }
+}
