@@ -141,3 +141,29 @@ const { evaluate, createTerminal } = require('./main')
     throw '#5 - It should throw'
   }
 }
+
+// test strict mode inside snippet
+{
+  let throws = false
+  const src = `
+  'use strict'
+
+  with({prop: 23}) {
+    console.log(prop)
+  }
+  `
+
+  try {
+    eval(src)
+  } catch (E) {
+    throws =
+      E.toString() ===
+      `SyntaxError: Strict mode code may not include a with statement`
+  }
+  success = throws
+  if (success) {
+    console.log('#6 - It should throw:', success)
+  } else {
+    throw '#6 - It should throw'
+  }
+}
