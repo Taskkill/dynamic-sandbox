@@ -24,7 +24,7 @@ function runInSandbox(source, context, restricted) {
   const scope = new Proxy(
     {
       source,
-      eval
+      eval,
     },
     {
       has(target, propName) {
@@ -38,22 +38,6 @@ function runInSandbox(source, context, restricted) {
 
         if (propName in restricted) {
           throw `ReferenceError: ${propName} is restricted`
-        }
-
-        // check if var or function variable infected current function's scope
-        let searchedVar
-        try {
-          eval(`searchedVar = ${propName}`)
-
-          if (typeof searchedVar === 'function') {
-            return false
-          }
-
-          return true
-        } catch (Ex) {
-          // searched for var not in global scope, not supplied from upper scope
-          // this var doesn't exist - throw Exception and log error
-          throw `ReferenceError: ${propName} is not defined`
         }
 
         return false
@@ -83,7 +67,7 @@ function runInSandbox(source, context, restricted) {
 function* runSandboxTerminal(source, context, restricted) {
   const target = {
     source,
-    eval
+    eval,
   }
 
   const scope = new Proxy(target, {
@@ -98,22 +82,6 @@ function* runSandboxTerminal(source, context, restricted) {
 
       if (propName in restricted) {
         throw `ReferenceError: ${propName} is restricted`
-      }
-
-      // check if var or function variable infected current function's scope
-      let searchedVar
-      try {
-        eval(`searchedVar = ${propName}`)
-
-        if (typeof searchedVar === 'function') {
-          return false
-        }
-
-        return true
-      } catch (Ex) {
-        // searched for var not in global scope, not supplied from upper scope
-        // this var doesn't exist - throw Exception and log error
-        throw `ReferenceError: ${propName} is not defined`
       }
 
       return false
