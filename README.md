@@ -79,9 +79,10 @@ in evaluated code and feed your output somewhere else. Overrode variables has hi
 so you can restrict everything non declared in code snippet and then selectively pick and allow/override some of properties easily.
 
 
-# It can run in batch/terminal mode too
-There is createTerminal function exported which creates terminal object for you.
-Thanks to use of generators you can send (valid) chunks of code and on top of that call some of them.
+# Terminal mode
+There is createTerminal function exported, which creates terminal object for you.
+With use of generators you can send chunks of code in terminal similarly as if you were streaming code into evaluator.
+Terminal keeps context between calls so you can declare functions and variables (only using `var`) in one chunk and use it in another one.
 Its extra useful when you want declare some functions and so on and then call them in small divided chunks of code, like in terminal.
 
 example:
