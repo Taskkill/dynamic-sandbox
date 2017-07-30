@@ -1,6 +1,13 @@
 # dynamic-sandbox
 Sandboxed and completely controlled javascript evaluator.
 
+``` bash
+npm install dynamic-sandbox
+```
+``` bash
+npm test
+```
+
 example:
 ``` javascript
 import { evaluate } from 'dynamic-sandbox'
