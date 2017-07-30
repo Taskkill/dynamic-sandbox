@@ -31,12 +31,14 @@ it's properties specify which variables should be considered protected and cause
 
 # Design
 By default it's mean to run everything what is not explicitly restricted.
-You can use 'restricted' object to define which properties should be protected from accessing.
-You can also use 'context' object to override variables, for example console, you can easily hijack console.log
+You can use `restricted` object to define which properties should be protected from accessing.
+You can also use `context` object to override variables, for example console, you can easily hijack console.log
 in evaluated code and feed your output somewhere else. Overrode variables has higher priority than restricted,
-so you can restrict whole object like 'window' and then selectively pick and allow some of properties easily.
+so you can restrict whole object like `window` and then selectively pick and allow some of properties easily.
 
 Global eval cannot be restricted as it is used internally.
+
+
 
 # Complete isolation mode
 It can run code snippet in completely isolated environment - only functons or
@@ -60,6 +62,14 @@ it's properties specify which variables should be overrode with supplied values.
 This object is changing behavior of isolation - basically it overrides isolation
 and define variables for code snippet. It acts similarly for isolation as acts for
 `restricted` properties in `evaluate` function.
+
+# Design
+By default it's mean to restrict everything what is not explicitly allowed or defined by context.
+You can use `allowed` object to define which properties should be given access to.
+You can also use `context` object to override variables, for example console, you can easily hijack console.log
+in evaluated code and feed your output somewhere else. Overrode variables has higher priority than implicit restricting,
+so you can restrict everything non declared in code snippet and then selectively pick and allow/override some of properties easily.
+
 
 
 # It can run in batch/terminal mode too
