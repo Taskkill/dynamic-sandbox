@@ -1,6 +1,6 @@
 {
   "name": "dynamic-sandbox",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Dynamic sandboxed and mockable environment for JavaScript code snippets.",
   "main": "main.js",
   "scripts": {
