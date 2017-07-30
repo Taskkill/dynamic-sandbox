@@ -92,7 +92,7 @@ function runInIsolation(source, allowed, context) {
 
   with (scope) {
     function runInInnerIsolation(source, context) {
-      const scope1 = new Proxy(
+      const innerScope = new Proxy(
         {
           source,
           eval
@@ -126,7 +126,7 @@ function runInIsolation(source, allowed, context) {
         }
       )
 
-      with (scope1) {
+      with (innerScope) {
         eval(source)
       }
     }
