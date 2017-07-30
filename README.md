@@ -38,6 +38,30 @@ so you can restrict whole object like 'window' and then selectively pick and all
 
 Global eval cannot be restricted as it is used internally.
 
+# Complete isolation mode
+It can run code snippet in completely isolated environment - only functons or
+properties declared inside snippet can be accessed within snippet code.
+Everything non declared there will fail with `ReferenceError - <variable name> is restricted` error.  
+
+``` javascript
+function isolate ( source, allowed, context )
+```
+
+## source - (string)
+it should be standard JavaScript code to run
+
+## allowed - (object)
+it's properties specify which of outer scope variables can be accessed.
+So you can give some ordinary JavaScript functionality to your code snippets.
+If you leave it blank no outer scope variables such as window, console or alert would be accessible.
+
+## context - (object)
+it's properties specify which variables should be overrode with supplied values.
+This object is changing behavior of isolation - basically it overrides isolation
+and define variables for code snippet. It acts similarly for isolation as acts for
+`restricted` properties in `evaluate` function.
+
+
 # It can run in batch/terminal mode too
 There is createTerminal function exported which creates terminal object for you.
 Thanks to use of generators you can send (valid) chunks of code and on top of that call some of them.
@@ -66,6 +90,6 @@ API of sendBatch function is exactly same as of evaluate
 
 
 ## It is in active development
-todo: correct error throwing and tests
+todo: add tests for terminal mode and Symbolify inner variables
 
 It's all comming soon
