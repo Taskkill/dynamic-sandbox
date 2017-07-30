@@ -15,7 +15,8 @@ You can specify which variables should be allowed, restricted and you can even
 override behavior of any variable in submitted snippet.
 It can be used for code snippet evaluators on client and in node.
 
-# API
+# Standard mode
+## API
 ``` javascript
 function evaluate ( source, context, restricted )
 ```
@@ -40,6 +41,7 @@ Global eval cannot be restricted as it is used internally.
 
 
 # Complete isolation mode
+## API
 It can run code snippet in completely isolated environment - only functons or
 properties declared inside snippet can be accessed within snippet code.
 Everything non declared there will fail with `ReferenceError - <variable name> is restricted` error.  
