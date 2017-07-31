@@ -42,7 +42,7 @@ By default it's mean to run everything what is not explicitly restricted.
 You can use `restricted` object to define which properties should be protected from accessing.
 You can also use `context` object to override variables, for example console, you can easily hijack console.log
 in evaluated code and feed your output somewhere else. Overrode variables has higher priority than restricted,
-so you can restrict whole object like `window` and then selectively pick and allow some of properties easily.
+so you can restrict whole object like `window` and then selectively pick and allow some of variables easily.
 
 Global eval cannot be restricted as it is used internally.
 
@@ -72,11 +72,11 @@ and define variables for code snippet. It acts similarly for isolation as acts f
 `restricted` properties in `evaluate` function.
 
 # Design
-By default it's mean to restrict everything what is not explicitly allowed or defined by context.
+By default it's mean to restrict everything what is not explicitly allowed or defined by snippet context.
 You can use `allowed` object to define which properties should be given access to.
 You can also use `context` object to override variables, for example console, you can easily hijack console.log
-in evaluated code and feed your output somewhere else. Overrode variables has higher priority than implicit restricting,
-so you can restrict everything non declared in code snippet and then selectively pick and allow/override some of properties easily.
+in evaluated code and feed your output somewhere else. Overrode variables has higher priority than implicit restriction,
+so you can restrict everything non declared in code snippet and then selectively pick and allow/override some of variables easily.
 
 
 # Terminal mode
