@@ -63,7 +63,7 @@ it should be standard JavaScript code to run
 ## allowed - (object)
 it's properties specify which of outer scope variables can be accessed.
 So you can give some ordinary JavaScript functionality to your code snippets.
-If you leave it blank no outer scope variables such as window, console or alert would be accessible.
+If you leave it blank no outer scope variables such as `window`, `console` or `alert` would be accessible.
 
 ## context - (object)
 it's properties specify which variables should be overrode with supplied values.
