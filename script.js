@@ -5,8 +5,9 @@ function run() {
 
   const source = document.getElementById('snippet').textContent
   try {
-    evaluate(
+    isolate(
       source,
+      {},
       {
         console: {
           log() {
@@ -24,7 +25,7 @@ function run() {
           }
         },
       },
-      window
+      // window
     )
   } catch (Ex) {
     output.innerHTML += `<span style="color:red; font-weight:bold;">${Ex} </span><br>`
