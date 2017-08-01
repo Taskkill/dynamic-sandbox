@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>dynamic-sandbox demo</title>
+  <meta name="author" content="Taskkill">
+  <!-- snippet runner js -->
+  <script src="./module/main.js"></script>
+  <script src="./script.js"></script>
+  <link rel="stylesheet" href="./style.css">
+
+
+</head>
+
+<body>
+  <div id="snippet" contenteditable="true">
+    let it2 = Iterallise(
+    <br>&nbsp;&nbsp;function* gener(input) {
+    <br>&nbsp;&nbsp;&nbsp;&nbsp;while (true) {
+    <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('worker iterallise');
+    <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;yield(input++);
+    <br>&nbsp;&nbsp;&nbsp;&nbsp;}
+    <br>&nbsp;&nbsp;}, 4);
+    <br>
+    <br>
+    it2.next().then(res => console.log(res));
+    <br>
+    it2.next().then(res => console.log(res));
+    <br>
+    it2.next().then(res => console.log(res));
+    <br>
+    it2.next().then(res => console.log(res));
+    <br>
+    it2.next().then(res => console.log(res));
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    Parallise(
+    <br>&nbsp;(resolve, reject) => {
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;console.log("look in console");
+      <br>&nbsp;&nbsp;&nbsp;&nbsp;resolve('from worker')}
+      <br>&nbsp;)
+      <br>&nbsp;&nbsp;.then(console.log)
+    <br>
+    <br>
+    console.log('before Parallise');
+    <br>
+    <br>
+    Promise.resolve('what you mate').then(console.log);
+    <br>
+    Promise.resolve('resolved').then(console.log);
+    <br>
+    <br>
+    let omen = "Amend";
+    <br>function trest () {alert("za trest " + omen);};
+    <br>alert("hello world");
+    <br>alert("hello world");
+    <br>let prom = 4;
+    <br>alert("after prom setted");
+    <br>var shit = "shite";
+    <br>alert(shit);
+    <br>const str = 'ahojda' + prom;
+    <br>console.log('No to me podrz!', "Jestlipak to funguje spravne", 23, 42, 18);
+    <br>trest();
+    <br>console.log(run.toString());
+  </div>
+  <br>
+  <button onclick="run()">RUN</button>
+  <br>
+
+  <div id="console-output">
+  </div>
+  <br>
+  <br>
+
+  <textarea id="terminal" type="text" style="width:400px;height:200px;"></textarea>
+  <br>
+  <button onclick="runTerminal()">COMMIT</button>
+  <div id="term-output"> </div>
+
+
+</body>
+</html>
