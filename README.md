@@ -123,6 +123,10 @@ API of sendBatch function is exactly same as of evaluate
 
 
 ## It is in active development
-todo: add tests for terminal mode and Symbolify inner variables
+todos:
+- add tests for terminal mode
+- Symbolify inner variables
+- `allowed` and `restricted` as a functions
+- API for logging outer variables access from snippet
 
 It's all comming soon
