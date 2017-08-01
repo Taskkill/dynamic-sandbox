@@ -1,5 +1,31 @@
 const { evaluate, isolate, createTerminal } = require('./main')
 
+// examples from README
+{
+  // #1
+  {
+    const snippet = `console.log('Hello world!')`
+
+    evaluate(snippet)
+  }
+
+  // #2
+  {
+    const snippet = `
+    let a = 23
+    let b = a++
+    submit(a + b)
+    `
+    const allowed = {
+      submit: val => console.log(val)
+    }
+
+    isolate(snippet, {}, allowed)
+  }
+
+  console.log('\n\n')
+}
+
 // test evaluate
 {
   console.log('Testing evaluate()')

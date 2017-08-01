@@ -14,7 +14,22 @@ import { evaluate } from 'dynamic-sandbox'
 
 const snippet = `console.log('Hello world!')`
 
-evaluate(snippet)
+evaluate(snippet) // Hello world!
+```
+
+``` javascript
+import { isolate } from 'dynamic-sandbox'
+
+const snippet = `
+let a = 23
+let b = a++
+submit(a + b)
+`
+const allowed = {
+  submit: val => console.log(val)
+}
+
+isolate(snippet, {}, allowed) // 47
 ```
 
 # It's completely controllable
