@@ -7,7 +7,7 @@ function run() {
   try {
     isolate(
       source,
-      {},
+      {alert: val => alert(val)},
       {
         console: {
           log() {
