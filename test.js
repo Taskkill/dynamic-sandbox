@@ -1,4 +1,8 @@
-const { evaluate, isolate, createTerminal } = require('./main')
+const {
+  evaluate,
+  isolate,
+  createTerminal
+} = require('./main')
 
 // examples from README
 {
@@ -171,6 +175,32 @@ const { evaluate, isolate, createTerminal } = require('./main')
     }
   }
 
+  // test for var declaration overriding restricted variable
+  {
+    let output = []
+    const src = `
+    var a = 23
+    console.log(a)
+    `
+    const context = {
+      console: {
+        log: val => output.push(val)
+      }
+    }
+    const restricted = {
+      a: 0,
+    }
+
+    evaluate(src, context, restricted)
+
+    const success = output[0] === 23
+    if (success) {
+      console.log('#6 - It should be same:', success)
+    } else {
+      throw '#6 - It should be same'
+    }
+  }
+
   // test strict mode inside snippet
   {
     let throws = false
@@ -191,9 +221,9 @@ const { evaluate, isolate, createTerminal } = require('./main')
     }
     success = throws
     if (success) {
-      console.log('#6 - It should throw:', success)
+      console.log('#7 - It should throw:', success)
     } else {
-      throw '#6 - It should throw'
+      throw '#7 - It should throw'
     }
   }
 }
@@ -205,7 +235,7 @@ const { evaluate, isolate, createTerminal } = require('./main')
   // test transparency
   {
     const src = `
-  console.log('#7 - It should log normally:', true)
+  console.log('#8 - It should log normally:', true)
   `
     const allowed = {
       console
@@ -243,9 +273,9 @@ const { evaluate, isolate, createTerminal } = require('./main')
 
     const success = JSON.stringify(output) === JSON.stringify(referenceOut)
     if (success) {
-      console.log('#8 - It should be same:', success)
+      console.log('#9 - It should be same:', success)
     } else {
-      throw '#8 - It should be same'
+      throw '#9 - It should be same'
     }
   }
 
@@ -265,9 +295,9 @@ const { evaluate, isolate, createTerminal } = require('./main')
 
     const success = throws
     if (success) {
-      console.log('#9 - It should throw:', success)
+      console.log('#10 - It should throw:', success)
     } else {
-      throw '#9 - It should throw'
+      throw '#10 - It should throw'
     }
   }
 
@@ -293,9 +323,9 @@ const { evaluate, isolate, createTerminal } = require('./main')
 
     const success = output[0] === 23 && output[1] === 46 && output[2] === 69
     if (success) {
-      console.log('#10 - It should be same:', success)
+      console.log('#11 - It should be same:', success)
     } else {
-      throw '#10 - It should be same'
+      throw '#11 - It should be same'
     }
   }
 
@@ -319,9 +349,9 @@ const { evaluate, isolate, createTerminal } = require('./main')
 
     const success = output[0] === 23 && output.length === 1
     if (success) {
-      console.log('#11 - It should be same:', success)
+      console.log('#12 - It should be same:', success)
     } else {
-      throw '#11 - It should be same'
+      throw '#12 - It should be same'
     }
   }
 
@@ -339,9 +369,9 @@ const { evaluate, isolate, createTerminal } = require('./main')
     }
     const success = throws
     if (success) {
-      console.log('#12 - It should throw:', success)
+      console.log('#13 - It should throw:', success)
     } else {
-      throw '#12 - It should throw'
+      throw '#13 - It should throw'
     }
   }
 
@@ -365,9 +395,9 @@ const { evaluate, isolate, createTerminal } = require('./main')
     }
     success = throws
     if (success) {
-      console.log('#13 - It should throw:', success)
+      console.log('#14 - It should throw:', success)
     } else {
-      throw '#13 - It should throw'
+      throw '#14 - It should throw'
     }
   }
 }
