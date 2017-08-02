@@ -32,6 +32,8 @@ const allowed = {
 isolate(snippet, {}, allowed) // 47
 ```
 
+## Demo: https://taskkill.github.io/dynamic-sandbox/
+
 # It's completely controllable
 You can specify which variables should be allowed, restricted and you can even
 override behavior of any variable in submitted snippet.
