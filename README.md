@@ -34,8 +34,14 @@ isolate(snippet, {}, allowed) // 47
 
 ## Demo: https://taskkill.github.io/dynamic-sandbox/
 
+# It's not completely secure!
+For example if code snippet contains IIFE - https://developer.mozilla.org/en-US/docs/Glossary/IIFE
+this sandbox is not able to prevent accessing of global object, even empty bind()
+call on function will lead to accessing global context. So if you care about security really you should not use this project.
+
 # It's completely controllable
-You can specify which variables should be allowed, restricted and you can even
+On the other hand if you just need some evaluator and want to override some of variables
+this project can be for you. You decide. So you can specify which variables should be allowed, restricted and you can even
 override behavior of any variable in submitted snippet.
 It can be used for code snippet evaluators on client and in node.
 
@@ -138,3 +144,7 @@ todos:
 - API for logging outer variables access from snippet
 
 It's all comming soon
+
+This project will remain as it is, because of how JavaScript works I am not able
+to make it completely isolated and it was for study purpose after all. Use it if you want
+but there probable won't be any updates.
