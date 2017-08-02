@@ -6,6 +6,7 @@ const {
 
 // examples from README
 {
+  console.log('Tests from examples')
   // #1
   {
     const snippet = `console.log('Hello world!')`
@@ -27,7 +28,7 @@ const {
     isolate(snippet, {}, allowed)
   }
 
-  console.log('\n\n')
+  console.log('')
 }
 
 // test evaluate
