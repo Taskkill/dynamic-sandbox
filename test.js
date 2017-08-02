@@ -271,6 +271,29 @@ const {
       throw '#9 - It should not be same'
     }
   }
+
+  // test restrict eval inside snippet
+  {
+    let throws = false
+    const src = `
+  eval('console.log("eval")')
+  `
+
+    try {
+      evaluate(src, {}, {
+        eval
+      })
+    } catch (E) {
+      throws = E.toString() ===
+        `ReferenceError: eval is restricted`
+    }
+    success = throws
+    if (success) {
+      console.log('#10 - It should throw:', success)
+    } else {
+      throw '#10 - It should throw'
+    }
+  }
 }
 
 // test isolate
@@ -487,6 +510,27 @@ const {
       console.log('#8 - It should not be same:', success)
     } else {
       throw '#8 - It should not be same'
+    }
+  }
+
+  // test breach eval
+  {
+    let throws = false
+    const src = `
+  eval('console.log("eval")')
+  `
+
+    try {
+      isolate(src)
+    } catch (E) {
+      throws = E.toString() ===
+        `ReferenceError: eval is restricted`
+    }
+    success = throws
+    if (success) {
+      console.log('#9 - It should throw:', success)
+    } else {
+      throw '#9 - It should throw'
     }
   }
 }
