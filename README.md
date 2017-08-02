@@ -1,5 +1,6 @@
+`deprecated`
 # dynamic-sandbox
-Sandboxed and completely controlled javascript evaluator.
+Almost sand-boxed and completely controlled JavaScript evaluator.
 
 ``` bash
 npm install dynamic-sandbox
@@ -136,14 +137,7 @@ terminal.sendBatch(command)
 API of sendBatch function is exactly same as of evaluate
 
 
-## It is in active development
-todos:
-- add tests for terminal mode
-- Symbolify inner variables
-- `allowed` and `restricted` as a functions
-- API for logging outer variables access from snippet
-
-It's all comming soon
+## It is not in active development!
 
 This project will remain as it is, because of how JavaScript works I am not able
 to make it completely isolated and it was for study purpose after all. Use it if you want
