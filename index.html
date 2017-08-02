@@ -14,6 +14,9 @@
 </head>
 
 <body>
+  <p>
+    Take a look at console for tests.
+  </p>
   <div id="snippet" contenteditable="true">
     let a = "first string";
     <br>function test () {alert("alert dialog: " + a);};
@@ -28,10 +31,15 @@
     <br>// delete me and try it yourself
   </div>
   <br>
-  <button onclick="run()">RUN</button>
+  <button onclick="ev()">EVALUATE</button>
+  <button onclick="is()">ISOLATE</button>
   <br>
 
   <div id="console-output">
+  </div>
+  <div>
+    EVALUATE - context: console{log, dir, error}, restricted: window
+    ISOLATE - allowed: {}, context: alert, console{log, dir, error}
   </div>
   <!-- <br>
   <br> -->
