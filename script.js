@@ -5,10 +5,10 @@ function run() {
 
   const source = document.getElementById('snippet').textContent
   try {
-    isolate(
+    evaluate(
       source,
-      {alert: val => alert(val)},
       {
+        alert: val => alert(val),
         console: {
           log() {
             for (let line of arguments) {
@@ -25,7 +25,7 @@ function run() {
           }
         },
       },
-      // window
+      window
     )
   } catch (Ex) {
     output.innerHTML += `<span style="color:red; font-weight:bold;">${Ex} </span><br>`
