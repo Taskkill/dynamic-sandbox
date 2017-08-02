@@ -211,8 +211,7 @@
       evaluate(src)
     } catch (E) {
       throws =
-        E.toString() ===
-        `SyntaxError: Strict mode code may not include a with statement`
+        E.toString().indexOf('SyntaxError: Strict mode') === 0
     }
     success = throws
     if (success) {
@@ -226,7 +225,7 @@
   {
     const output = []
     const src = `
-    console.log(this.process, this.global, this)
+    console.log(this.window, this.alert, this)
     `
     const context = {
       console: {
@@ -250,7 +249,7 @@
   {
     const output = []
     const src = `
-    console.log(this.process, this.global, this)
+    console.log(this.window, this.alert, this)
     `
     const context = {
       console: {
@@ -431,8 +430,7 @@
       isolate(src)
     } catch (E) {
       throws =
-        E.toString() ===
-        `SyntaxError: Strict mode code may not include a with statement`
+        E.toString().indexOf('SyntaxError: Strict mode') === 0
     }
     success = throws
     if (success) {
@@ -446,7 +444,7 @@
   {
     const output = []
     const src = `
-    console.log(this.process, this.global, this)
+    console.log(this.window, this.alert, this)
     `
     const context = {
       console: {
@@ -468,7 +466,7 @@
   {
     const output = []
     const src = `
-    console.log(this.process, this.global, this)
+    console.log(this.window, this.alert, this)
     `
     const context = {
       console: {
