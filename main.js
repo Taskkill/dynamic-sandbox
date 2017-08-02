@@ -46,12 +46,24 @@ function runInSandbox(source, context, restricted) {
 
   with(scope) {
     function runInInnerSandbox(source, context) {
+      const used = {
+        'eval': false,
+        'source': false
+      }
+
       const innerScope = new Proxy({
         source,
         eval
       }, {
         has(target, propName) {
           if (propName in target) {
+            if (!used[propName]) {
+              used[propName] = true
+              return false
+            }
+            if (propName in restricted) {
+              throw `ReferenceError: ${propName} is restricted`
+            }
             return false
           }
 
@@ -112,12 +124,25 @@ function runInIsolation(source, allowed, context) {
 
   with(scope) {
     function runInInnerIsolation(source, context) {
+      const used = {
+        'eval': false,
+        'source': false
+      }
+
       const innerScope = new Proxy({
         source,
         eval
       }, {
         has(target, propName) {
           if (propName in target) {
+            if (!used[propName]) {
+              used[propName] = true
+              return false
+            }
+            if (!(propName in allowed) &&
+              !(propName in context)) {
+              throw `ReferenceError: ${propName} is restricted`
+            }
             return false
           }
 
