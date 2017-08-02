@@ -50,7 +50,9 @@ it should be standard JavaScript code to run
 it's properties specify which variables should be overrode with supplied values
 
 ## restricted - (object)
-it's properties specify which variables should be considered protected and cause error
+it's properties specify which variables should be considered protected and cause
+error if accessing. If `this` property provided, snippet's this context will be empty object,
+thus snippet code will not be able to access properties using `this.propertyName`.
 
 # Design
 By default it's mean to run everything what is not explicitly restricted.
@@ -58,6 +60,7 @@ You can use `restricted` object to define which properties should be protected f
 You can also use `context` object to override variables, for example console, you can easily hijack console.log
 in evaluated code and feed your output somewhere else. Overrode variables has higher priority than restricted,
 so you can restrict whole object like `window` and then selectively pick and allow some of variables easily.
+By default `this` is allowed to be accessed with all it's properties.
 
 Global eval cannot be restricted as it is used internally.
 
@@ -79,6 +82,8 @@ it should be standard JavaScript code to run
 it's properties specify which of outer scope variables can be accessed.
 So you can give some ordinary JavaScript functionality to your code snippets.
 If you leave it blank no outer scope variables such as `window`, `console` or `alert` would be accessible.
+If `this` property provided, snippet code will be given access to `this` properties
+as `this` will be default JavaScript `this context` depending on environment.
 
 ## context - (object)
 it's properties specify which variables should be overrode with supplied values.
@@ -92,6 +97,7 @@ You can use `allowed` object to define which properties should be given access t
 You can also use `context` object to override variables, for example console, you can easily hijack console.log
 in evaluated code and feed your output somewhere else. Overrode variables has higher priority than implicit restriction,
 so you can restrict everything non declared in code snippet and then selectively pick and allow/override some of variables easily.
+By default `this` is restricted and provided empty object without any properties.
 
 
 # Terminal mode
