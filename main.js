@@ -27,8 +27,9 @@ function runInSandbox(source, context, restricted) {
   const scope = new Proxy({
     source,
     context,
+    restricted,
     Proxy,
-    eval
+    eval,
   }, {
     has(target, propName) {
       if (propName in target) {
@@ -81,7 +82,10 @@ function runInSandbox(source, context, restricted) {
       }
     }
 
-    runInInnerSandbox(source, context)
+    if ('this' in restricted) {
+      return runInInnerSandbox.call({}, source, context)
+    }
+    return runInInnerSandbox(source, context)
   }
 }
 
@@ -89,8 +93,9 @@ function runInIsolation(source, allowed, context) {
   const scope = new Proxy({
     source,
     context,
+    allowed,
     Proxy,
-    eval
+    eval,
   }, {
     has(target, propName) {
       if (propName in target) {
@@ -143,7 +148,10 @@ function runInIsolation(source, allowed, context) {
       }
     }
 
-    runInInnerIsolation(source, context)
+    if ('this' in allowed) {
+      return runInInnerIsolation(source, context)
+    }
+    return runInInnerIsolation.call({}, source, context)
   }
 }
 

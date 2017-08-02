@@ -11,7 +11,7 @@ const {
   {
     const snippet = `console.log('Hello world!')`
 
-    evaluate(snippet)
+    evaluate(snippet) // Hello world!
   }
 
   // #2
@@ -21,11 +21,11 @@ const {
     let b = a++
     submit(a + b)
     `
-    const allowed = {
-      submit: val => console.log(val)
+    const context = {
+      submit: val => console.log(val),
     }
 
-    isolate(snippet, {}, allowed)
+    isolate(snippet, {}, context) // 47
   }
 
   console.log('')
@@ -227,6 +227,52 @@ const {
       throw '#7 - It should throw'
     }
   }
+
+  // test restricting this properties
+  {
+    const output = []
+    const src = `
+    console.log(this.process, this.global, this)
+    `
+    const context = {
+      console: {
+        log: (first, second, third) => output.push(first) && output.push(second) && output.push(third)
+      }
+    }
+
+    evaluate(src, context, {
+      'this': undefined
+    })
+
+    const success = output[0] === undefined && output[1] === undefined && output[2].toString() === {}.toString()
+    if (success) {
+      console.log('#8 - It should be same:', success)
+    } else {
+      throw '#8 - It should be same'
+    }
+  }
+
+  // test accessing this properties
+  {
+    const output = []
+    const src = `
+    console.log(this.process, this.global, this)
+    `
+    const context = {
+      console: {
+        log: (first, second, third) => output.push(first) && output.push(second) && output.push(third)
+      }
+    }
+
+    evaluate(src, context, {})
+
+    const success = output[0] !== undefined && output[1] !== undefined && output[2].toString() !== {}.toString()
+    if (success) {
+      console.log('#9 - It should not be same:', success)
+    } else {
+      throw '#9 - It should not be same'
+    }
+  }
 }
 
 // test isolate
@@ -236,7 +282,7 @@ const {
   // test transparency
   {
     const src = `
-  console.log('#8 - It should log normally:', true)
+  console.log('#0 - It should log normally:', true)
   `
     const allowed = {
       console
@@ -274,9 +320,9 @@ const {
 
     const success = JSON.stringify(output) === JSON.stringify(referenceOut)
     if (success) {
-      console.log('#9 - It should be same:', success)
+      console.log('#1 - It should be same:', success)
     } else {
-      throw '#9 - It should be same'
+      throw '#1 - It should be same'
     }
   }
 
@@ -296,9 +342,9 @@ const {
 
     const success = throws
     if (success) {
-      console.log('#10 - It should throw:', success)
+      console.log('#2 - It should throw:', success)
     } else {
-      throw '#10 - It should throw'
+      throw '#2 - It should throw'
     }
   }
 
@@ -324,9 +370,9 @@ const {
 
     const success = output[0] === 23 && output[1] === 46 && output[2] === 69
     if (success) {
-      console.log('#11 - It should be same:', success)
+      console.log('#3 - It should be same:', success)
     } else {
-      throw '#11 - It should be same'
+      throw '#3 - It should be same'
     }
   }
 
@@ -350,9 +396,9 @@ const {
 
     const success = output[0] === 23 && output.length === 1
     if (success) {
-      console.log('#12 - It should be same:', success)
+      console.log('#4 - It should be same:', success)
     } else {
-      throw '#12 - It should be same'
+      throw '#4 - It should be same'
     }
   }
 
@@ -370,9 +416,9 @@ const {
     }
     const success = throws
     if (success) {
-      console.log('#13 - It should throw:', success)
+      console.log('#5 - It should throw:', success)
     } else {
-      throw '#13 - It should throw'
+      throw '#5 - It should throw'
     }
   }
 
@@ -396,9 +442,55 @@ const {
     }
     success = throws
     if (success) {
-      console.log('#14 - It should throw:', success)
+      console.log('#6 - It should throw:', success)
     } else {
-      throw '#14 - It should throw'
+      throw '#6 - It should throw'
+    }
+  }
+
+  // test restricted access to this properties
+  {
+    const output = []
+    const src = `
+    console.log(this.process, this.global, this)
+    `
+    const context = {
+      console: {
+        log: (first, second, third) => output.push(first) && output.push(second) && output.push(third)
+      }
+    }
+
+    isolate(src, {}, context)
+
+    const success = output[0] === undefined && output[1] === undefined && output[2].toString() === {}.toString()
+    if (success) {
+      console.log('#7 - It should be same:', success)
+    } else {
+      throw '#7 - It should be same'
+    }
+  }
+
+  // test allowing this
+  {
+    const output = []
+    const src = `
+    console.log(this.process, this.global, this)
+    `
+    const context = {
+      console: {
+        log: (first, second, third) => output.push(first) && output.push(second) && output.push(third)
+      }
+    }
+
+    isolate(src, {
+      'this': undefined
+    }, context)
+
+    const success = output[0] !== undefined && output[1] !== undefined && output[2].toString() !== {}.toString()
+    if (success) {
+      console.log('#8 - It should not be same:', success)
+    } else {
+      throw '#8 - It should not be same'
     }
   }
 }
