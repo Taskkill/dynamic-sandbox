@@ -208,9 +208,7 @@ const {
     const src = `
   'use strict'
 
-  with({prop: 23}) {
-    console.log(prop)
-  }
+  with({}) {}
   `
 
     try {
@@ -428,9 +426,7 @@ const {
     const src = `
   'use strict'
 
-  with({prop: 23}) {
-    console.log(prop)
-  }
+  with({}) {}
   `
 
     try {
