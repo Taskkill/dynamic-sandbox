@@ -294,6 +294,23 @@ const {
       throw '#10 - It should throw'
     }
   }
+
+
+  // test eval inside snippet
+  {
+    let throws = false
+    const src = `
+  eval('console.log("#11 - It should pass:", true)')
+  `
+
+    try {
+      evaluate(src, {}, {})
+    } catch (E) {
+      throws = E.toString() ===
+        `ReferenceError: eval is restricted`
+        console.log('#11 - It should pass:', ! throws)
+    }
+  }
 }
 
 // test isolate
