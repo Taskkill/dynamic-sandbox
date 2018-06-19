@@ -76,7 +76,7 @@ Global eval cannot be restricted as it is used internally.
 
 # Complete isolation mode
 ## API
-It can run code snippet in completely isolated environment - only functons or
+It can run code snippet in completely isolated environment - only functions or
 properties declared inside snippet can be accessed within snippet code.
 Everything non declared there will fail with `ReferenceError - <variable name> is restricted` error.  
 
