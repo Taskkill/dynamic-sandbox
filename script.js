@@ -24,7 +24,7 @@ function ev() {
           }
         },
       },
-      window
+      // window
     )
   } catch (Ex) {
     output.innerHTML += `<span style="color:red; font-weight:bold;">${Ex} </span><br>`

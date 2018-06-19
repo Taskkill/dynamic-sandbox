@@ -1,4 +1,3 @@
-// version test 0
 (function module() {
   const exports = {
     evaluate(source, context = {}, restricted = {}) {
