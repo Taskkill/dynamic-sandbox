@@ -1,10 +1,12 @@
 (function module() {
+  const scopeCheckLimit = getScopeCheckLimit()
+
   const exports = {
     evaluate(source, context = {}, restricted = {}) {
-      runInSandbox(source, context, restricted)
+      runInSandbox(source, context, restricted, scopeCheckLimit)
     },
     isolate(source, allowed = {}, context = {}) {
-      runInIsolation(source, allowed, context)
+      runInIsolation(source, allowed, context, scopeCheckLimit)
     },
     createTerminal() {
       let terminal = null
@@ -28,21 +30,21 @@
   window.isolate = exports.isolate
   window.createTerminal = exports.createTerminal
 
-  function runInSandbox(source, context, restricted) {
+  function runInSandbox(source, context, restricted, scopeCheckLimit) {
     const scope = new Proxy({
       source,
       context,
       restricted,
       Proxy,
-      eval,
+      eval
     }, {
       has(target, propName) {
-        if (propName in target) {
+        if (propName in target || propName in context) {
           return false
         }
 
         if (propName in restricted) {
-          throw `ReferenceError: ${propName} is restricted`
+          throw `OUTER ReferenceError: ${propName} is restricted`
         }
 
         return false
@@ -52,23 +54,26 @@
     with(scope) {
       function runInInnerSandbox(source, context) {
         const used = {
-          'eval': false,
-          'source': false
+          eval: 0,
+          source: scopeCheckLimit - 1
         }
 
         const innerScope = new Proxy({
-          source,
-          eval
+          source: null,
+          eval: null
         }, {
           has(target, propName) {
             if (propName in target) {
-              if (!used[propName]) {
-                used[propName] = true
+              if (used[propName] < scopeCheckLimit) {
+                ++used[propName]
+
                 return false
               }
+
               if (propName in restricted) {
                 throw `ReferenceError: ${propName} is restricted`
               }
+              
               return false
             }
 
@@ -100,17 +105,19 @@
       }
 
       if ('this' in restricted) {
-        return runInInnerSandbox.call({}, source, context)
+        runInInnerSandbox.call({}, source, context)
+        return
       }
-      return runInInnerSandbox(source, context)
+      runInInnerSandbox(source, context)
     }
   }
 
-  function runInIsolation(source, allowed, context) {
+  function runInIsolation(source, allowed, context, scopeCheckLimit) {
     const scope = new Proxy({
       source,
       context,
       allowed,
+      scopeCheckLimit,
       Proxy,
       eval,
     }, {
@@ -130,24 +137,32 @@
     with(scope) {
       function runInInnerIsolation(source, context) {
         const used = {
-          'eval': false,
-          'source': false
+          eval: 0,
+          source: scopeCheckLimit - 1,
+          allowed: scopeCheckLimit,
+          context : scopeCheckLimit,
+          scopeCheckLimit: scopeCheckLimit
         }
 
         const innerScope = new Proxy({
-          source,
-          eval
+          source: null,
+          eval: null,
+          allowed,
+          context,
+          scopeCheckLimit
         }, {
           has(target, propName) {
             if (propName in target) {
-              if (!used[propName]) {
-                used[propName] = true
+              if (used[propName] < scopeCheckLimit) {
+                ++used[propName]
                 return false
               }
+
               if (!(propName in allowed) &&
                 !(propName in context)) {
                 throw `ReferenceError: ${propName} is restricted`
               }
+
               return false
             }
 
@@ -185,6 +200,7 @@
     }
   }
 
+  // todo: implement better isolation
   function* runSandboxTerminal(source, context, restricted) {
     const target = {
       source,
@@ -225,4 +241,34 @@
       target.source = yield
     }
   }
+
+  function getScopeCheckLimit() {
+    let scopeCheckLimit = 0
+    const scope = new Proxy({
+    }, {
+      has: () => false
+    })
+
+    with(scope) {
+      const innerScope = new Proxy({
+        eval: null
+      }, {
+        has(_, propName) {
+          if (propName === 'eval') {
+            ++scopeCheckLimit
+          }
+
+          return false
+        }
+      })
+
+      with(innerScope) {
+        eval('')
+      }
+
+      // runInInnerSandbox()
+      return scopeCheckLimit
+    }
+  }
+
 })()
