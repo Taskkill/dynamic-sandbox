@@ -44,7 +44,7 @@
         }
 
         if (propName in restricted) {
-          throw `OUTER ReferenceError: ${propName} is restricted`
+          throw `ReferenceError: ${propName} is restricted`
         }
 
         return false
