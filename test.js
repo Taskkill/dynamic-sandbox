@@ -308,7 +308,7 @@ const {
     } catch (E) {
       throws = E.toString() ===
         `ReferenceError: eval is restricted`
-        console.log('#11 - It should pass:', ! throws)
+        throw '#11 - It should pass:'
     }
   }
 }
